@@ -186,7 +186,7 @@ console.log("V 1.0.0");
 
 
 function render(){
-  var url="http://zclarke.xyz/urlembeder/r/?"+btoa(encodeURIComponent(escape(editor.getValue())));
+  var url="https://zclarke.xyz/urlembeder/r/?"+btoa(encodeURIComponent(escape(editor.getValue())));
   document.getElementById("output").src=url;
 }
 
@@ -198,66 +198,12 @@ function updateSettings(){
 
 
 
-function consolejs(args){
-	this.settings=args;
-	var elem=document.createElement('div');
-	elem.id="console-js";
-	elem.style.cssText="position:fixed;width:60vw;height:90vh;left:80vw;top:77vh;color:#eeeeee;background-color:#2b2b35;font-size:4vmin;";
-	elem.innerHTML="<p onclick='consolejs.toggle();' style='padding-left:5%;background-color:#181819;margin-top:0;padding-top:10px;padding-bottom:10px;'>Console</p><div id='console-js-content' style='height:65%;overflow-x:hidden;overflow-y:scroll;'></div><input id='console-js-input' type='text' style='position:absolute;bottom:95px;left:0;width:100%;background-color:#636577;border:none;color:white;font-size:4vmin;z-index:1001;' placeholder='>' onchange='console.log(this.value);console.log(eval(this.value));'>";
-	document.body.appendChild(elem);
-
-	this.log=function(msg){
-	document.getElementById("console-js-content").innerHTML+="<pre style='padding-left:10px;margin-top:0;border-bottom:1px #bdbdbd solid;'>"+this.stylize(msg)+"</pre>";
-	this.scroll();
-	//document.getElementById("console-js-input").value="";
-
-	}
-	this.warn=function(msg){
-		document.getElementById("console-js-content").innerHTML+="<p style='padding-left:10px;margin-top:0;padding-top:0;border-bottom:1px #bdbdbd solid;color:#ffd60c;'>"+this.stylize(msg)+"</p>";
-		this.scroll();
-	}
-	this.toggle=function(){
-		if(document.getElementById("console-js").style.top=="10vh"){
-			document.getElementById("console-js").style.top="77vh";
-			document.getElementById("console-js").style.left="80vw";
-		}else{
-			document.getElementById("console-js").style.top="10vh";
-			document.getElementById("console-js").style.left="40vw";
-		}
-	}
-	this.stylize=function(msg){
-		if(typeof(msg)=="function"){
-			msg="func(){}";
-		}else{
-			msg=JSON.stringify(msg,null,2);
-			msg=msg.replace(/^"(.+(?="$))"$/, '$1');
-		}
-		return msg;
-		this.scroll();
-	}
-	this.scroll=function(){
-		var div=document.getElementById("console-js");
-		div.scrollTop=div.scrollHeight-div.clientHeight;
-
-	}
-}
-
-window.onerror=function(msg,url,line,column,error){
-	if(url==""){
-		url="Unknown";
-	}
-	document.getElementById("console-js-content").innerHTML+="<a href='http://stackoverflow.com/search?q=[js] "+msg+"' target='_blank' style='text-decoration:none;'><p style='padding-left:10px;margin-top:0;padding:top:0;border-bottom:1px #bdbdbd solid;color:red;background-color:#edbab1;'>"+msg+"("+url+":Line "+line+")"+"</p></a>";
-	console.error(msg);
-}
-
-
-
-
 var console=(function(oldCons){
     return {
         log: function(text){
             oldCons.log(text);
             consolejs.log(text);
+            console.log("Afa");
             // Your code
         },
         info: function (text) {
