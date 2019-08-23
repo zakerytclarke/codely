@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>URL Embeder</title>
+
+<link href="https://fonts.googleapis.com/css?family=IBM+Plex+Serif" rel="stylesheet">
+<style type="text/css" media="screen">
+html{
+  font-family: 'Orbitron', sans-serif;
+  font-size:4vmin;
+  background-color:#232323;
+  overflow-y:hidden;
+}
+#header{
+  width:100%;
+  color:#e0e3e5;
+  background-color:#232323;
+  vertical-align:middle;
+}
+#editor {
+  position:absolute;
+  top:20vh;
+  left: 0;
+  width:50%;
+  height:80vh;
+}
+#output{
+  background-color:white;
+  position:absolute;
+  top:20vh;
+  right:0;
+  width:50%;
+  height:60vh;
+}
+#console{
+  position:absolute;
+  top:80vh;
+  right:0;
+  width:50.25%;
+  height:20vh;
+  color:#e0e3e5;
+}
+#url{
+  color:#e0e3e5;
+  border:black;
+  border-radius:2vmin;
+  padding:10px;
+  background-color:#4c4a4a;
+  vertical-align:middle;
+}
+#font{
+  color:#e0e3e5;
+  border:black;
+  border-radius:2vmin;
+  padding:10px;
+  background-color:#4c4a4a;
+  vertical-align:middle;
+}
+#fav{
+  color:#e0e3e5;
+  border:black;
+  border-radius:2vmin;
+  padding:10px;
+  background-color:#4c4a4a;
+  vertical-align:middle;
+}
+#bookmark{
+  color:#e0e3e5;
+  border:black;
+  border-radius:2vmin;
+  background-color:#4c4a4a;
+  vertical-align:middle;
+}
+padding:10px;
+#theme{
+  color:#e0e3e5;
+  border:black;
+  border-radius:2vmin;
+  padding:10px;
+  background-color:#4c4a4a;
+  vertical-align:middle;
+}
+
+select{
+  padding:10px;
+  color:#e0e3e5;
+  border:black;
+
+  background-color:#4c4a4a;
+  border-radius:4vw;
+}
+
+button{
+  padding:10px;
+  color:#e0e3e5;
+  border:black;
+  background-color:#4c4a4a;
+  border-radius:2vmin;
+}
+</style>
+</head>
+<body>
+<div id="header">
+<h1 style="display:inline-block;vertical-align:middle;">
+Codely
+</h1>
+
+
+<div style="display:inline-block;margin-left:25vw;">
+<select id="theme" style="display:inline-block;" onchange="updateSettings();">
+<option value="chrome">Chrome</option>
+<option value="clouds">Clouds</option>
+<option value="clouds_midnight">Clouds Midnight</option>
+<option value="cobalt">Cobalt</option>
+<option value="crimson_editor">Crimson Editor</option>
+<option value="dawn">Dawn</option>
+<option value="eclipse">Eclipse</option>
+<option value="idle_fingers">Idle Finegrs</option>
+<option value="kr_theme">Kr Theme</option>
+<option value="merbivore">Merbivore</option>
+<option value="merbivore_soft">Merbivore Soft</option>
+<option value="mono_industrial">Mono Industrial</option>
+<option value="monokai">Monokai</option>
+<option value="pastel_on_dark">Pastel On Dark</option>
+<option value="solarized_dark">Solarized Dark</option>
+<option value="solarized_light">Solarized Light</option>
+<option value="textmate">TextMate</option>
+<option value="tomorrow">Tomorrow</option>
+<option value="tomorrow_night">Tomorrow Night</option>
+<option value="tomorrow_night_blue">Tomorrow Night Blue</option>
+<option value="tomorrow_night_bright">Tomorrow Night Bright</option>
+<option value="tomorrow_night_eighties">Tomorrow Night Eighties</option>
+<option selected value="twilight">Twilight</option>
+<option value="vibrant_ink">Vibrant Ink</option>
+</select>
+<button onclick="render()">
+Run
+</button>
+<!--
+<input id="font" type="text" value="12" onchange="">
+
+
+<input id="url" type="button" value="Fullscreen" onclick="view();">
+
+<button id="fav" onclick="addFavorite();">
+<img src="assets/star.png">
+</button>
+<button id="bookmark" onclick="toggleBookmark();">
+<img src="assets/bookmark.png">
+</button>
+-->
+  </div>
+
+</div>
+<div>
+<div id="editor">&lt;h1&gt;Hello World&lt;/h1&gt;
+&lt;script&gt;
+&lt;/script&gt;</div>
+<iframe id="output" src=""></iframe>
+<div id="console">
+<p id="console-js" style="margin-left:20px;margin-top:10px;">
+Console
+<span id="console-js-content">
+</span>
+</p>
+</div>
+</div>
+
+
+
+<script src="ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+
+
+var editor = ace.edit("editor");
+editor.setTheme("ace/theme/twilight");
+editor.setOptions({fontSize: "12pt"});
+editor.getSession().setMode("ace/mode/html");
+editor.getSession().on('change', function() {
+  render();
+});
+
+
+console.log("V 1.0.0");
+
+
+
+function render(){
+  var url="http://zclarke.xyz/urlembeder/r/?"+btoa(encodeURIComponent(escape(editor.getValue())));
+  document.getElementById("output").src=url;
+}
+
+
+function updateSettings(){
+  editor.setTheme("ace/theme/"+document.getElementById("theme").value);
+}
+
+
+
+
+function consolejs(args){
+	this.settings=args;
+	var elem=document.createElement('div');
+	elem.id="console-js";
+	elem.style.cssText="position:fixed;width:60vw;height:90vh;left:80vw;top:77vh;color:#eeeeee;background-color:#2b2b35;font-size:4vmin;";
+	elem.innerHTML="<p onclick='consolejs.toggle();' style='padding-left:5%;background-color:#181819;margin-top:0;padding-top:10px;padding-bottom:10px;'>Console</p><div id='console-js-content' style='height:65%;overflow-x:hidden;overflow-y:scroll;'></div><input id='console-js-input' type='text' style='position:absolute;bottom:95px;left:0;width:100%;background-color:#636577;border:none;color:white;font-size:4vmin;z-index:1001;' placeholder='>' onchange='console.log(this.value);console.log(eval(this.value));'>";
+	document.body.appendChild(elem);
+
+	this.log=function(msg){
+	document.getElementById("console-js-content").innerHTML+="<pre style='padding-left:10px;margin-top:0;border-bottom:1px #bdbdbd solid;'>"+this.stylize(msg)+"</pre>";
+	this.scroll();
+	//document.getElementById("console-js-input").value="";
+
+	}
+	this.warn=function(msg){
+		document.getElementById("console-js-content").innerHTML+="<p style='padding-left:10px;margin-top:0;padding-top:0;border-bottom:1px #bdbdbd solid;color:#ffd60c;'>"+this.stylize(msg)+"</p>";
+		this.scroll();
+	}
+	this.toggle=function(){
+		if(document.getElementById("console-js").style.top=="10vh"){
+			document.getElementById("console-js").style.top="77vh";
+			document.getElementById("console-js").style.left="80vw";
+		}else{
+			document.getElementById("console-js").style.top="10vh";
+			document.getElementById("console-js").style.left="40vw";
+		}
+	}
+	this.stylize=function(msg){
+		if(typeof(msg)=="function"){
+			msg="func(){}";
+		}else{
+			msg=JSON.stringify(msg,null,2);
+			msg=msg.replace(/^"(.+(?="$))"$/, '$1');
+		}
+		return msg;
+		this.scroll();
+	}
+	this.scroll=function(){
+		var div=document.getElementById("console-js");
+		div.scrollTop=div.scrollHeight-div.clientHeight;
+
+	}
+}
+
+window.onerror=function(msg,url,line,column,error){
+	if(url==""){
+		url="Unknown";
+	}
+	document.getElementById("console-js-content").innerHTML+="<a href='http://stackoverflow.com/search?q=[js] "+msg+"' target='_blank' style='text-decoration:none;'><p style='padding-left:10px;margin-top:0;padding:top:0;border-bottom:1px #bdbdbd solid;color:red;background-color:#edbab1;'>"+msg+"("+url+":Line "+line+")"+"</p></a>";
+	console.error(msg);
+}
+
+
+
+
+var console=(function(oldCons){
+    return {
+        log: function(text){
+            oldCons.log(text);
+            consolejs.log(text);
+            // Your code
+        },
+        info: function (text) {
+            oldCons.info(text);
+        },
+        warn: function (text) {
+            oldCons.warn(text);
+            consolejs.warn(text);
+
+        },
+        error: function (text) {
+            //oldCons.error(text);
+
+        }
+    };
+}(window.console));
+window.console=console;
+</script>
+</body>
+</html>
