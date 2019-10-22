@@ -1,0 +1,12 @@
+CREATE TABLE users(
+   email VARCHAR (320) UNIQUE NOT NULL,
+   passwordHash VARCHAR (60) NOT NULL,
+   plan VARCHAR (10) NOT NULL,
+   sessionId VARCHAR (256) NOT NULL,
+   stripeToken VARCHAR (100),
+   stripeCustomerToken VARCHAR (100),
+   stripePlanToken VARCHAR (100),
+   lastLogin TIMESTAMP
+);
+
+psql -h server -U user dbname

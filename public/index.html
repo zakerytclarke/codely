@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>URL Embeder</title>
+<title>Codely</title>
 
 <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Serif" rel="stylesheet">
 <style type="text/css" media="screen">
@@ -30,7 +30,7 @@ html{
   top:20vh;
   right:0;
   width:50%;
-  height:60vh;
+  height:80vh;
 }
 #console{
   position:absolute;
@@ -71,7 +71,6 @@ html{
   background-color:#4c4a4a;
   vertical-align:middle;
 }
-padding:10px;
 #theme{
   color:#e0e3e5;
   border:black;
@@ -96,6 +95,7 @@ button{
   border:black;
   background-color:#4c4a4a;
   border-radius:2vmin;
+  vertical-align:middle;
 }
 </style>
 </head>
@@ -105,8 +105,7 @@ button{
 Codely
 </h1>
 
-
-<div style="display:inline-block;margin-left:25vw;">
+<div style="display:inline-block;position:absolute;right:0;top:7vh;vertical-align:middle;">
 <select id="theme" style="display:inline-block;" onchange="updateSettings();">
 <option value="chrome">Chrome</option>
 <option value="clouds">Clouds</option>
@@ -133,14 +132,18 @@ Codely
 <option selected value="twilight">Twilight</option>
 <option value="vibrant_ink">Vibrant Ink</option>
 </select>
+<!--
 <button onclick="render()">
 Run
+</button>
+-->
+<button id="fullscreen" onclick="viewFullscreen();">
+  Fullscreen
 </button>
 <!--
 <input id="font" type="text" value="12" onchange="">
 
 
-<input id="url" type="button" value="Fullscreen" onclick="view();">
 
 <button id="fav" onclick="addFavorite();">
 <img src="assets/star.png">
@@ -153,10 +156,11 @@ Run
 
 </div>
 <div>
-<div id="editor">&lt;h1&gt;Hello World&lt;/h1&gt;
+<div id="editor">&lt;h1&gt;Hello World!&lt;/h1&gt;
 &lt;script&gt;
 &lt;/script&gt;</div>
 <iframe id="output" src=""></iframe>
+<!--
 <div id="console">
 <p id="console-js" style="margin-left:20px;margin-top:10px;">
 Console
@@ -164,6 +168,7 @@ Console
 </span>
 </p>
 </div>
+-->
 </div>
 
 
@@ -183,11 +188,18 @@ editor.getSession().on('change', function() {
 
 console.log("V 1.0.0");
 
+var o=window.location.search.substr(1);
+if(o){//Linked to editor
+  console.log(unescape(decodeURIComponent(atob(o))));
+  editor.setValue(unescape(decodeURIComponent(atob(o))));
+}
 
+render();
 
 function render(){
   var url="https://zclarke.xyz/urlembeder/r/?"+btoa(encodeURIComponent(escape(editor.getValue())));
   document.getElementById("output").src=url;
+  history.pushState("","Codely","./?"+btoa(encodeURIComponent(escape(editor.getValue()))));
 }
 
 
@@ -196,31 +208,29 @@ function updateSettings(){
 }
 
 
+function viewFullscreen(){
+  var url="https://zclarke.xyz/urlembeder/r/?"+btoa(encodeURIComponent(escape(editor.getValue())));
+  window.open(url);
+}
 
 
-var console=(function(oldCons){
-    return {
-        log: function(text){
-            oldCons.log(text);
-            consolejs.log(text);
-            console.log("Afa");
-            // Your code
-        },
-        info: function (text) {
-            oldCons.info(text);
-        },
-        warn: function (text) {
-            oldCons.warn(text);
-            consolejs.warn(text);
-
-        },
-        error: function (text) {
-            //oldCons.error(text);
-
+//Overwrite Console Output
+/*
+(function () {
+    if (!console) {
+        console = {};
+    }
+    var old = console.log;
+    var logger = document.getElementById('log');
+    console.log = function (message) {
+        if (typeof message == 'object') {
+            logger.innerHTML += (JSON && JSON.stringify ? JSON.stringify(message) : String(message)) + '<br />';
+        } else {
+            logger.innerHTML += message + '<br />';
         }
-    };
-}(window.console));
-window.console=console;
+    }
+})();
+*/
 </script>
 </body>
 </html>
